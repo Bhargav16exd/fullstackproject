@@ -4,12 +4,7 @@ import "../components/authentication.css";
 
 function Authentication() {
   const [state, setState] = useState("Sign In");
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    cpassword:"",
-    name: "", // Only used for Sign Up
-  });
+  const [formData, setFormData] = useState({});
   const [error, setError] = useState("");
 
   const handleInputChange = (e) => {

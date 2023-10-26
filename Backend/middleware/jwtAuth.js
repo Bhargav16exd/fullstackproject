@@ -5,6 +5,8 @@ exports.infoByCokkie = (req,res,next) => {
    
     const token = ( req.cookies && req.cookies.token ) || null;
 
+    console.log(token)
+
    if(!token){
     
     return res.status(400).json({
@@ -12,6 +14,8 @@ exports.infoByCokkie = (req,res,next) => {
         message:'Not Authorised'
     })
    }
+
+   
 
    try {
 

@@ -8,9 +8,7 @@ exports.signup = async (req,res,next)=>{
 
 const {name ,email , password, cpassword} = req.body;
 console.log(req.body);
-
-        console.log(name,email,password)
-   
+  
        if(!name || !email || !password){
         res.status(400).json({
             status:false,
@@ -42,13 +40,11 @@ console.log(req.body);
             password
         })
     
-     
         res.status(201).json({
             success: true ,
             message:"USER CREATED SUCCESSFULY",
+            result
         })
-
-  
 
         
     } catch (error) {
@@ -65,51 +61,72 @@ console.log(req.body);
 
 // SIGN IN 
 
-
-
 exports.signIN = async (req, res) => {
-    const { email, password } = req.body;
+
+     
+
+    const { email , password } = req.body
 
     console.log(email,password)
-  
-    if (!email || !password) {
-      return res.status(400).json({
-        status: false,
-        message: "All fields are mandatory",
-      });
+
+    if(!email || !password ) {
+        console.log(email,password)
+        return res.status(400).json({
+            status:false,
+            message:"All fields are mandatory"
+        })
+        
     }
-  
 
     try {
-      const user = await User.findOne({ email }).select('+password');
-  
-      console.log(user)
 
-      if (!user) {
-        return res.status(400).json({
-          status: false,
-          message: 'Invalid credentials',
-        });
-      }
-  
-      const passwordMatch = bcrypt.compare(password, user.password);
-  
-      if (!passwordMatch) {
-        return res.status(400).json({
-          status: false,
-          message: 'Invalid credentials',
-        });
-      }
-  
-      // Rest of your code (e.g., token creation and response)
-  
+        const reqInfo = await User.findOne({
+            email,
+        })
+        .select('+password');
+        console.log(reqInfo)
+    
+        console.log((await bcrypt.compare( password , reqInfo.password)))
+
+        if(!reqInfo || ! (await bcrypt.compare(password,reqInfo.password))){
+            
+           return res.status(400).json({
+                status:false,
+                message:'invalid credentials'
+            })
+        }
+
+
+        // Token Creation 
+       const token = reqInfo.jwttoken()
+       User.password = undefined;
+
+       const  cookieOption = {
+        maxAge: 24*60*60*1000,
+        httpOnly:true,
+       }
+      
+        res.cookie("token",token,cookieOption);
+
+        res.status(200).json({
+            success:true,
+            message:"hi"
+        })
+
+        
     } catch (error) {
-      return res.status(400).json({
-        success: false,
-        message: error.message,
-      });
+        return res.status(400).json({
+            success: false,
+            message: error.message,
+            message:"Kindly Log In",
+          }) 
+        
     }
-  };
+ 
+    
+    
+}
+
 
 
 exports.getUser = async (req, res) => {
