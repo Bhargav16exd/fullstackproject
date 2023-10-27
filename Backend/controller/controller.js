@@ -32,6 +32,19 @@ console.log(req.body);
         })
     }
 
+
+    const checkEmailExist = await User.findOne({email});
+
+    if(checkEmailExist){
+
+        return res.status(400).json({
+            success:"false",
+            message:"Email Already Exists"
+        })
+
+    }
+
+
     try {
 
            const result = await User.create({
@@ -110,7 +123,7 @@ exports.signIN = async (req, res) => {
 
         res.status(200).json({
             success:true,
-            message:"hi"
+            message:"Login Success"
         })
 
         

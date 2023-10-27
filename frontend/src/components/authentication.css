@@ -3,8 +3,8 @@
     height: 400px;
     width: 350px;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
 }
 .logo{
@@ -13,7 +13,7 @@
 }
 input{
     border: 1px solid rgb(189, 189, 189);
-    margin: 5px;
+    margin: 8px 40px;
     padding: 5px;
     height: 38px ;
     width: 268px;
@@ -29,4 +29,12 @@ input{
 a{
     color: #1b74e4;
     cursor: pointer;
+}
+.error-message{
+    margin: 8px 40px;
+    color: red;
+}
+.success-message{
+    margin: 8px 40px;
+    color: green;
 }

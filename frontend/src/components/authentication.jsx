@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "../components/authentication.css";
 
@@ -6,6 +6,8 @@ function Authentication() {
   const [state, setState] = useState("Sign In");
   const [formData, setFormData] = useState({});
   const [error, setError] = useState("");
+  const [response ,setResponse] = useState();
+  const [btnState , setBtnState] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -14,6 +16,16 @@ function Authentication() {
       [name]: value,
     });
   };
+
+  useEffect(()=>{
+   setError(null);
+   setResponse(null); 
+   
+  },[state])
+
+
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,12 +48,14 @@ function Authentication() {
         });
   
         if (response.data.success) {
-          // Handle success
+           setResponse(response.data.message);
+           setError(null);
         }
   
       } catch (error) {
         if (error.response) {
-            setError(error.response.data.message); 
+            setError(error.response.data.message);
+            setResponse(null); 
           }
       }
   
@@ -91,12 +105,14 @@ function Authentication() {
           />
           
           {error && <div className="error-message">{error}</div>}
+          {response && <div className="success-message">{response}</div>}
           <button className="Button">{state}</button>
         </form>
         <p>
           {state === "Sign Up" ? (
             <>
-              Already Have an Account? <a className="btn" onClick={() => setState("Sign In")}>Sign In</a>
+              Already Have an Account? <a className="btn" onClick={() => 
+                (setState("Sign In") , setBtnState(true))}>Sign In</a>
             </>
           ) : (
             <>
